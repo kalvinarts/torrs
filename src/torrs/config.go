@@ -29,7 +29,7 @@ func ParseConfig() *Config {
 	flag.BoolVar(&config.ListFiles, "l", false, "List all files in the torrent")
 	flag.IntVar(&config.FileIndex, "n", 0, "Selects the file index number to download (use -l to see file index numbers)(takes precedence over -t)")
 	flag.StringVar(&config.SelectByExtension, "t", "", "Selects the first file with that extension (e.g. .mp4)(takes precedence over -e)")
-	flag.StringVar(&config.SelectByExpression, "e", "", "Select the first file by expression (e.g. -e \".*S01E01.*\")")
+	flag.StringVar(&config.SelectByExpression, "e", "", "Select the first file that matches a regular expression")
 	flag.StringVar(&config.Port, "p", "8457", "Port to serve the file on")
 	flag.StringVar(&config.DownloadDir, "d", os.Getenv("HOME")+"/Downloads", "Download directory")
 	flag.BoolVar(&config.Seed, "s", false, "Seed the torrent after download")

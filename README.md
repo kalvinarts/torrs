@@ -31,7 +31,7 @@ torrs -m "magnet:?xt=urn:btih:..."
 | `-l` | List all files in the torrent | false |
 | `-n` | Selects the file index number to download (use -l to see file index numbers)(takes precedence over -t) | 0 |
 | `-t` | Selects the first file with that extension (e.g. mp4)(takes precedence over -e) | - |
-| `-e` | Select the first file by expression (e.g. ".*S01E01.*") | - |
+| `-e` | Select the first file that matches a regular expression | - |
 | `-p` | Port to serve the file on | "8457" |
 | `-d` | Download directory | "~/Downloads" |
 | `-s` | Seed the torrent after download | false |
