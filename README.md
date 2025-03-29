@@ -5,7 +5,9 @@ A simple torrent streaming service
 ## Installation
 
 ```bash
-make install
+curl -sL https://github.com/kalvinarts/torrs/releases/latest/download/torrs-$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m | sed -e 's/x86_64/amd64/' -e 's/aarch64/arm64/') -o torrs && \
+chmod +x torrs && \
+sudo mv torrs /usr/local/bin
 ```
 
 ## Usage
