@@ -24,8 +24,8 @@ torrs -m "magnet:?xt=urn:btih:..."
 
 ### Options
 
-| Flag | Description | Default |
-|------|-------------|---------|
+| Option | Description | Default |
+|--------|-------------|---------|
 | `-m` | Magnet link for the torrent | - |
 | `-fc` | Get magnet link from clipboard | false |
 | `-l` | List all files in the torrent | false |
