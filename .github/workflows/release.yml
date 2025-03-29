@@ -1,0 +1,31 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.23'
+    - name: Build Release Binaries
+      run: make release-build
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          dist/torrs-linux-amd64
+          dist/torrs-linux-arm64
+          dist/torrs-darwin-amd64
+          dist/torrs-darwin-arm64
+          dist/torrs-windows-amd64.exe
+          dist/torrs-windows-arm64.exe
+        generate_release_notes: true

@@ -1,0 +1,26 @@
+# Binaries
+/dist
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary
+*.test
+
+# Output of the go coverage tool
+*.out
+
+# Dependency directories
+/vendor/
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Any markdown files but the README
+*.md
+!README.md
