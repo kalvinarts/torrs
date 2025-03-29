@@ -54,11 +54,6 @@ Stream the first MP4 file found:
 torrs -m "magnet:?xt=urn:btih:..." -t mp4
 ```
 
-Stream episode using regex:
-```bash
-torrs -m "magnet:?xt=urn:btih:..." -e ".*S01E01.*"
-```
-
 Stream the first file getting the magnet from clipboard:
 ```bash
 torrs -fc -n 1
