@@ -75,5 +75,5 @@ If no file index number is specified the first file of the torrent will be strea
 | `make release-build` | Build releases for Linux, macOS, and Windows |
 
 ## Roadmap
- - Add libVLC to stream to chromecast and airplay
+ - Add libVLC to stream to chromecast
  - Add testing
