@@ -4,11 +4,15 @@ A simple torrent streaming service
 
 ## Installation
 
+### Using the install script (Linux/macOS)
+
 ```bash
-curl -sL https://github.com/kalvinarts/torrs/releases/latest/download/torrs-$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m | sed -e 's/x86_64/amd64/' -e 's/aarch64/arm64/') -o torrs && \
-chmod +x torrs && \
-sudo mv torrs /usr/local/bin
+curl -fsSL https://raw.githubusercontent.com/kalvinarts/torrs/main/install.sh | sh
 ```
+
+### Manual download
+
+You can also download the binary for your system directly from the [releases page](https://github.com/kalvinarts/torrs/releases/latest).
 
 ## Usage
 
