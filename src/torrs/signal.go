@@ -18,7 +18,7 @@ func SetupSignalHandler(server *http.Server, client *torrent.Client, progress *P
 
 	go func() {
 		<-c
-		log.Println(RightPadToTerminalWidth("\r> Shutting down..."))
+		log.Print(RightPadToTerminalWidth("\r> Shutting down...\n"))
 		progress.Stop()
 		server.Shutdown(context.Background())
 		client.Close()
