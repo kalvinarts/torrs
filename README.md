@@ -59,8 +59,6 @@ Stream the first file getting the magnet from clipboard:
 torrs -fc -n 1
 ```
 
-If no file index number is specified the first file of the torrent will be streamed
-
 ## Development
 
 | Command | Description |
