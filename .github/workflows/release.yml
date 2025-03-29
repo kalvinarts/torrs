@@ -17,7 +17,7 @@ jobs:
       with:
         go-version: '1.23'
     - name: Build Release Binaries
-      run: make release-build
+      run: make build-release
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
