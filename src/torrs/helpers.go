@@ -16,7 +16,10 @@ func FormatEncodedPath(filePath string) string {
 // CleanFilePath the file path by removing any parent directory references
 func CleanFilePath(path string) string {
 	parts := strings.Split(path, "/")
-	// Omit the first part as it is the name of the torrent
+	if len(parts) <= 1 {
+		return path
+	}
+	// Omit the first part as it is the name of the torrent folder
 	return strings.Join(parts[1:], "/")
 }
 
