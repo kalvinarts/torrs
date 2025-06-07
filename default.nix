@@ -34,9 +34,9 @@ pkgs.buildGoModule rec {
   go = pkgs.go_1_23; # Specify Go version
 
   meta = with pkgs.lib; {
-    description = "A command-line BitTorrent client written in Go"; # User to update
-    homepage = "https://github.com/kalvinpearce/torrs";    # User to update
-    license = licenses.mit; # Or user's chosen license
-    # maintainers = [ maintainers.your-github-username ]; # Optional
+    description = "A simple torrent streaming service";
+    homepage = "https://github.com/kalvinarts/torrs";
+    license = licenses.mit;
+    maintainers = [ maintainers.kalvinarts ];
   };
 }

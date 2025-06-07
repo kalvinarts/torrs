@@ -61,6 +61,24 @@ torrs -fc -n 1
 
 ## Development
 
+### Development Environment (Nix)
+
+This project uses [Nix](https://nixos.org/) to manage its development environment and build process, ensuring reproducibility.
+
+To activate the development environment, run:
+```bash
+nix-shell
+```
+All `make` commands should be run within this shell or will invoke it as needed.
+
+If you update Go dependencies (`go.mod`/`go.sum`), you'll need to update the Nix vendor hash:
+```bash
+make update-vendor-hash
+```
+Then commit the changes to `default.nix`, `go.mod`, and `go.sum`.
+
+### Available Make Commands
+
 | Command | Description |
 |---------|-------------|
 | `make build` | Build the project |
@@ -69,8 +87,9 @@ torrs -fc -n 1
 | `make run` | Run the application |
 | `make lint` | Lint the code using revive |
 | `make install` | Install the application |
-| `make release-build` | Build releases for Linux, macOS, and Windows |
+| `make build-release` | Build releases for Linux, macOS, and Windows |
+| `make update-vendor-hash` | Update the Go vendor hash in `default.nix` |
 
 ## Roadmap
  - Add libVLC to stream to chromecast
- - Add testing
+ - Expand test coverage
