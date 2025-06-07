@@ -23,7 +23,7 @@ clean:
 	rm -f result result-*
 
 test:
-	$(NIX_SHELL_CMD) "go test -v -race -cover ./..."
+	$(NIX_SHELL_CMD) "go mod vendor && go test -v -race -cover -mod=vendor ./..."
 
 run: build
 	$(DIST_DIR)/$(APP_NAME)
