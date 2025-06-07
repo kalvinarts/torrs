@@ -20,7 +20,7 @@ clean:
 	rm -rf $(DIST_DIR)/
 	rm -f coverage.out
 	$(NIX_SHELL_CMD) "go clean -testcache"
-	rm -f result
+	rm -f result result-*
 
 test:
 	$(NIX_SHELL_CMD) "go test -v -race -cover ./..."
@@ -32,7 +32,9 @@ lint:
 	$(NIX_SHELL_CMD) "revive -config revive.toml -formatter friendly ./..."
 
 install: build
-	cp $(DIST_DIR)/$(APP_NAME) $$(go env GOPATH)/bin/$(APP_NAME) # Use go env GOPATH for robustness
+	$(eval GOPATH_VALUE := $(shell nix-shell -p go --run "go env GOPATH"))
+	@echo "Installing to $(GOPATH_VALUE)/bin/$(APP_NAME)"
+	$(NIX_SHELL_CMD) "mkdir -p $(GOPATH_VALUE)/bin && cp $(DIST_DIR)/$(APP_NAME) $(GOPATH_VALUE)/bin/$(APP_NAME)"
 
 build-release:
 	@echo "Building Linux AMD64 (via Nix)"
