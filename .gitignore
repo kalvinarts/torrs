@@ -1,5 +1,6 @@
 # Binaries
 /dist
+/result
 *.exe
 *.exe~
 *.dll
