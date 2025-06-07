@@ -60,7 +60,8 @@ pkgs.buildGoModule rec {
 
   # Dependencies needed by buildGoModule itself or by hooks
   # git for versioning script, cacert for potential network access during build by Go
-  nativeBuildInputs = [ pkgs.git pkgs.cacert ];
+  # revive, gotools, go-outline for linting and other Go development tasks
+  nativeBuildInputs = [ pkgs.git pkgs.cacert pkgs.revive pkgs.gotools pkgs.go-outline ];
 
   # We have a 'make test' target, so disable default test running during build.
   doCheck = false;
