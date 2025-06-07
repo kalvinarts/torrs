@@ -55,25 +55,12 @@ build-release:
 # It often requires setting up specific cross compilers in your Nix expressions or using overlays like nixpkgs-cross-overlay.
 # The Go fallback above uses nix-shell to get 'go' and then uses Go's native cross-compilation.
 
-.PHONY: update-vendor-hash
 update-vendor-hash:
-	@echo "Attempting to update vendorHash in default.nix..."
-	# Backup default.nix before modifying
-	@cp default.nix default.nix.bak.vendorupdate
-	# Temporarily set a known incorrect hash to force Nix to output the correct one.
-	@sed -i 's|^  vendorHash = .*$$|  vendorHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";|' default.nix
-	# Run nix-build, capture stderr, and parse the expected hash.
-	# The error message looks like: error: output path '...' has sha256 hash '...' when 'sha256-...' was expected
-	@NEW_HASH=$$(nix-build --no-out-link default.nix 2>&1 | grep "sha256 hash '.*' when '" | sed -n "s/.*when '\(sha256-.*\)' was expected/\1/p" || echo ""); \
-	if [ -n "$$NEW_HASH" ]; then \
-		echo "Found new vendorHash: $$NEW_HASH"; \
-		# Update default.nix with the new hash (from the backup to avoid issues if sed failed above)
-		@sed -i "s|^  vendorHash = .*$$|  vendorHash = \"$$NEW_HASH\";|" default.nix.bak.vendorupdate && mv default.nix.bak.vendorupdate default.nix; \
-		echo "default.nix updated successfully."; \
-	else \
-		echo "Failed to automatically find the new vendorHash."; \
-		echo "Restoring default.nix from backup."; \
-		echo "Please run 'nix-build --no-out-link default.nix' and manually update vendorHash in default.nix."; \
-		@mv default.nix.bak.vendorupdate default.nix; \
-		exit 1; \
-	fi
+	@echo "Running vendorHash update script from scripts/update-vendor-hash.sh..."
+	@chmod +x ./scripts/update-vendor-hash.sh
+	@./scripts/update-vendor-hash.sh ; \
+	STATUS=$$?; \
+	if [ $$STATUS -ne 0 ]; then \
+		echo "Vendor hash update script failed with status $$STATUS."; \
+	fi; \
+	exit $$STATUS

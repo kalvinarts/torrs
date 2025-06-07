@@ -32,7 +32,7 @@ pkgs.buildGoModule rec {
   # Run: nix-build --no-out-link .
   # Nix will error and show the expected hash.
   # Or run: make update-vendor-hash
-  vendorHash = "sha256-kINVoOfAAWT5s846xqfqK9Dw+Fs5KH4tzYa3IWVojHM="; # Updated with the correct hash
+  vendorHash = "sha256-kINVoOfAAWT5s846xqfqK9Dw+Fs5KH4tzYa3IWVojHM=";
 
   # Pass the version to the Go linker.
   ldflags = [ "-X main.version=${version}" ];
