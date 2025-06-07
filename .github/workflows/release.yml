@@ -12,14 +12,19 @@ jobs:
       contents: write
     steps:
     - uses: actions/checkout@v4
-    - name: Set up Go
-      uses: actions/setup-go@v5
       with:
-        go-version: '1.23'
-    - name: Build Release Binaries
+        fetch-depth: 0 # Required for git describe to work correctly
+
+    - name: Install Nix
+      uses: cachix/install-nix-action@v26
+      with:
+        nix_path: nixpkgs=channel:nixos-unstable # Or your preferred channel
+
+    - name: Build Release Binaries (via Make)
       run: make build-release
+
     - name: Create Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         files: |
           dist/torrs-linux-amd64
