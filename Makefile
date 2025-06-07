@@ -46,13 +46,13 @@ build-release:
 	# As a placeholder, we'll call the Go commands directly within a nix-shell for now
 	# This won't be as reproducible as a pure Nix build for those targets.
 	@echo "Building Darwin AMD64 (Go fallback)"
-	$(NIX_SHELL_CMD) "CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags '-X main.version=$(VERSION)' -o $(DIST_DIR)/$(APP_NAME)-darwin-amd64 ./src/$(APP_NAME)"
+	$(NIX_SHELL_CMD) "go mod vendor && CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -mod=vendor -ldflags '-X main.version=$(VERSION)' -o $(DIST_DIR)/$(APP_NAME)-darwin-amd64 ./src/$(APP_NAME)"
 	@echo "Building Darwin ARM64 (Go fallback)"
-	$(NIX_SHELL_CMD) "CGO_ENABLED=0 GOOS=darwin GOARCH=arm64 go build -ldflags '-X main.version=$(VERSION)' -o $(DIST_DIR)/$(APP_NAME)-darwin-arm64 ./src/$(APP_NAME)"
+	$(NIX_SHELL_CMD) "go mod vendor && CGO_ENABLED=0 GOOS=darwin GOARCH=arm64 go build -mod=vendor -ldflags '-X main.version=$(VERSION)' -o $(DIST_DIR)/$(APP_NAME)-darwin-arm64 ./src/$(APP_NAME)"
 	@echo "Building Windows AMD64 (Go fallback)"
-	$(NIX_SHELL_CMD) "CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -ldflags '-X main.version=$(VERSION)' -o $(DIST_DIR)/$(APP_NAME)-windows-amd64.exe ./src/$(APP_NAME)"
+	$(NIX_SHELL_CMD) "go mod vendor && CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -mod=vendor -ldflags '-X main.version=$(VERSION)' -o $(DIST_DIR)/$(APP_NAME)-windows-amd64.exe ./src/$(APP_NAME)"
 	@echo "Building Windows ARM64 (Go fallback)"
-	$(NIX_SHELL_CMD) "CGO_ENABLED=0 GOOS=windows GOARCH=arm64 go build -ldflags '-X main.version=$(VERSION)' -o $(DIST_DIR)/$(APP_NAME)-windows-arm64.exe ./src/$(APP_NAME)"
+	$(NIX_SHELL_CMD) "go mod vendor && CGO_ENABLED=0 GOOS=windows GOARCH=arm64 go build -mod=vendor -ldflags '-X main.version=$(VERSION)' -o $(DIST_DIR)/$(APP_NAME)-windows-arm64.exe ./src/$(APP_NAME)"
 
 # Notes for cross-compilation:
 # True Nix-based cross-compilation for Darwin/Windows from Linux is more involved.
