@@ -30,11 +30,13 @@ echo "Backed up original ${DEFAULT_NIX} to ${ORIGINAL_BACKUP_NIX}"
 # 2. Create a temporary copy of default.nix to modify for the hash check
 cp "${DEFAULT_NIX}" "${TEMP_NIX_FOR_HASH_CHECK}"
 
-# 3. Temporarily set an incorrect hash in this temporary copy.
-# The sed command here redirects its output to SED_OUT_TEMP_FILE, then mv replaces TEMP_NIX_FOR_HASH_CHECK
+# 3. Temporarily set vendorHash to a known incorrect placeholder hash in this temporary copy.
+# Using a known incorrect hash like "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+# is more reliable for triggering the hash mismatch error than using "null".
 sed 's#^ *vendorHash = .*;$#  vendorHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";#' "${TEMP_NIX_FOR_HASH_CHECK}" > "${SED_OUT_TEMP_FILE}"
+
 if [ $? -ne 0 ]; then
-    echo "ERROR: Failed to modify temporary nix file ${TEMP_NIX_FOR_HASH_CHECK} with placeholder hash."
+    echo "ERROR: Failed to modify temporary nix file ${TEMP_NIX_FOR_HASH_CHECK} to set vendorHash to placeholder."
     # Restore original default.nix as a precaution, though TEMP_NIX_FOR_HASH_CHECK was the target
     cp "${ORIGINAL_BACKUP_NIX}" "${DEFAULT_NIX}"
     echo "${DEFAULT_NIX} has been restored from ${ORIGINAL_BACKUP_NIX}."
@@ -47,16 +49,20 @@ if [ $? -ne 0 ]; then
     echo "${DEFAULT_NIX} has been restored from ${ORIGINAL_BACKUP_NIX}."
     exit 1
 fi
-echo "Temporarily modified ${TEMP_NIX_FOR_HASH_CHECK} with a placeholder hash."
+echo "Temporarily modified ${TEMP_NIX_FOR_HASH_CHECK} with placeholder vendorHash."
 
 # 4. Run nix-build on the temporary, modified default.nix to get the correct hash.
 echo "Running nix-build to determine the correct vendorHash..."
 NIX_BUILD_RAW_OUTPUT=$(nix-build --no-out-link "${TEMP_NIX_FOR_HASH_CHECK}" 2>&1 || true)
 
-# Extract the hash using awk. Use printf for both echo and awk part for safety.
-NEW_HASH=$(printf "%s" "$NIX_BUILD_RAW_OUTPUT" | awk '/^ *got: *sha256-/ { printf "%s", $2; exit }')
+# Extract the hash using a more specific pattern for "got: <hash>"
+# This is often the format Nix uses when a hash mismatch occurs for fixed-output derivations.
+NEW_HASH=$(printf "%s" "$NIX_BUILD_RAW_OUTPUT" | awk '
+  /^ *got: *sha256-/ { printf "%s", $2; exit }
+  END { if (NR==0 || $0 !~ /^ *got: *sha256-/) { print "HASH_NOT_FOUND"; exit 1 } }
+')
 
-if [ -n "$NEW_HASH" ]; then
+if [ -n "$NEW_HASH" ] && [ "$NEW_HASH" != "HASH_NOT_FOUND" ]; then
     echo "Successfully determined new vendorHash: $NEW_HASH"
 
     echo "Attempting to update ${DEFAULT_NIX} with sed..."

@@ -26,7 +26,25 @@ pkgs.buildGoModule rec {
   pname = "torrs";
   version = currentVersion; # Use dynamically determined version
 
-  src = ./.;
+  src = pkgs.lib.cleanSourceWith {
+    src = ./.;
+    filter = path: type:
+      let
+        baseName = baseNameOf (toString path);
+      in
+      !(
+        # Common Nix/dev exclusions
+        (type == "directory" && baseName == ".git") ||
+        (type == "directory" && baseName == ".direnv") ||
+        (type == "symlink" && builtins.match "result.*" baseName != null) ||
+        # Our specific backup/temp files
+        (builtins.match ".*\\.bak\\..*" baseName != null) || # e.g. default.nix.bak.vendorupdate.1749291398
+        (builtins.match ".*\\.forhashcheck\\.tmp" baseName != null) || # e.g. default.nix.forhashcheck.tmp
+        (builtins.match ".*\\.sed\\.tmp" baseName != null) || # e.g. default.nix.sed.tmp
+        # Vendored dependencies are handled by vendorHash, exclude them from src
+        (type == "directory" && baseName == "vendor")
+      );
+  };
 
   # IMPORTANT: Replace with actual hash after first build attempt.
   # Run: nix-build --no-out-link .
