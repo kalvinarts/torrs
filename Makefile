@@ -1,17 +1,17 @@
 VERSION ?= $(shell nix-shell --run "git describe --tags --always --dirty --match 'v*' 2>/dev/null || git rev-parse --short HEAD 2>/dev/null || echo \"unknown-dev-version\"")
 APP_NAME = torrs
 DIST_DIR = dist
-NIX_BUILD_CMD = nix-build --no-out-link default.nix
+NIX_BUILD_CMD = nix-build --no-out-link --argstr buildVersion "$(VERSION)" default.nix
 NIX_SHELL_CMD = nix-shell --pure default.nix --run
 
 .PHONY: build clean test run lint install build-release result update-vendor-hash
 
 # Target to get the Nix build result path
 result: 
-	@echo $$(nix-build --no-out-link default.nix)
+	@echo $$($(NIX_BUILD_CMD))
 
 build:
-	nix-build default.nix # This creates the ./result symlink
+	nix-build --argstr buildVersion "$(VERSION)" default.nix # This creates the ./result symlink
 	mkdir -p $(DIST_DIR)/
 	@echo "Copying binary from Nix store to $(DIST_DIR)/$(APP_NAME)"
 	cp ./result/bin/$(APP_NAME) $(DIST_DIR)/$(APP_NAME)
@@ -39,9 +39,9 @@ install: build
 build-release:
 	@echo "Building Linux AMD64 (via Nix)"
 	mkdir -p $(DIST_DIR)
-	cp $$(nix-build --no-out-link --argstr system "x86_64-linux" default.nix)/bin/$(APP_NAME) $(DIST_DIR)/$(APP_NAME)-linux-amd64
+	cp $$(nix-build --no-out-link --argstr system "x86_64-linux" --argstr buildVersion "$(VERSION)" default.nix)/bin/$(APP_NAME) $(DIST_DIR)/$(APP_NAME)-linux-amd64
 	@echo "Building Linux ARM64 (via Nix)"
-	cp $$(nix-build --no-out-link --argstr system "aarch64-linux" default.nix)/bin/$(APP_NAME) $(DIST_DIR)/$(APP_NAME)-linux-arm64
+	cp $$(nix-build --no-out-link --argstr system "aarch64-linux" --argstr buildVersion "$(VERSION)" default.nix)/bin/$(APP_NAME) $(DIST_DIR)/$(APP_NAME)-linux-arm64
 	# For Darwin and Windows, cross-compilation with Nix requires more setup (see notes below)
 	# As a placeholder, we'll call the Go commands directly within a nix-shell for now
 	# This won't be as reproducible as a pure Nix build for those targets.
