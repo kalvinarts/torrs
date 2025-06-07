@@ -20,6 +20,7 @@ clean:
 	rm -rf $(DIST_DIR)/
 	rm -f coverage.out
 	$(NIX_SHELL_CMD) "go clean -testcache"
+	rm -f result
 
 test:
 	$(NIX_SHELL_CMD) "go test -v -race -cover ./..."
