@@ -1,5 +1,6 @@
 # Binaries
 /dist
+/result # Nix build result symlink
 *.exe
 *.exe~
 *.dll

@@ -10,10 +10,11 @@ NIX_SHELL_CMD = nix-shell --pure default.nix --run
 result: 
 	@echo $$(nix-build --no-out-link default.nix)
 
-build: result
+build:
+	nix-build default.nix # This creates the ./result symlink
 	mkdir -p $(DIST_DIR)/
 	@echo "Copying binary from Nix store to $(DIST_DIR)/$(APP_NAME)"
-	cp $$(cat $<)/bin/$(APP_NAME) $(DIST_DIR)/$(APP_NAME)
+	cp ./result/bin/$(APP_NAME) $(DIST_DIR)/$(APP_NAME)
 
 clean:
 	rm -rf $(DIST_DIR)/
@@ -30,7 +31,7 @@ lint:
 	$(NIX_SHELL_CMD) "revive -config revive.toml -formatter friendly ./..."
 
 install: build
-	cp $(DIST_DIR)/$(APP_NAME) $(GOPATH)/bin/$(APP_NAME) # Or any other preferred install location
+	cp $(DIST_DIR)/$(APP_NAME) $$(go env GOPATH)/bin/$(APP_NAME) # Use go env GOPATH for robustness
 
 build-release:
 	@echo "Building Linux AMD64 (via Nix)"
