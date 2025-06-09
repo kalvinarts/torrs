@@ -36,7 +36,7 @@ pkgs.buildGoModule rec {
   meta = with pkgs.lib; {
     description = "A simple torrent streaming service";
     homepage = "https://github.com/kalvinarts/torrs";
-    license = licenses.mit;
+    license = licenses.bsd3;
     maintainers = [ maintainers.kalvinarts ];
   };
 }
