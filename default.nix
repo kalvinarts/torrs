@@ -6,7 +6,7 @@ pkgs.buildGoModule rec {
 
   src = ./.;
 
-  vendorHash = "sha256-kINVoOfAAWT5s846xqfqK9Dw+Fs5KH4tzYa3IWVojHM="; # Make sure this is up-to-date
+  vendorHash = "sha256-do+Xy8DuyS6kNbJAt2ERx4wLQ3km8FNdbXXdF88tCsI="; # Make sure this is up-to-date
 
   subPackages = [ "src/torrs" ];
 
