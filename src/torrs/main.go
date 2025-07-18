@@ -5,8 +5,11 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"slices"
+	"strings"
 	"time"
 
+	"github.com/anacrolix/torrent"
 	"github.com/atotto/clipboard"
 )
 
@@ -21,6 +24,10 @@ func main() {
 	fmt.Printf("> torrs - Simple torrent streaming service - %s\n", version)
 	CheckForMagnetLink(config)
 	client, _, files := TorrentInit(config)
+	// Sort files by name
+	slices.SortFunc(files, func(a, b *torrent.File) int {
+		return strings.Compare(a.Path(), b.Path())
+	})
 	if config.ListFiles {
 		ListFiles(files)
 		return
